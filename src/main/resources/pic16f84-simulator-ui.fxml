@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="850.0" prefWidth="1300.0" style="-fx-background-color: #ffffff;" stylesheets="@pic16f84-simulator-ui-stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pic16f84sim.ui.controller.SimulatorUiController">
+  <children>
+    <MenuBar>
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openFileChooser" text="Open…" />
+            <Menu fx:id="openRecentMenuItem" mnemonicParsing="false" text="Open Recent" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" onAction="#exit" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+                  <MenuItem mnemonicParsing="false" onAction="#showHelp" text="Help" />
+            <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#showAboutDialog" text="About" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+      <ButtonBar fx:id="controlNavBar" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #ecf0f1;">
+        <buttons>
+            <Button fx:id="runButton" mnemonicParsing="false" onAction="#runButtonClicked" text="Run">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
+            <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopButtonClicked" text="Stop">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="stepButton" mnemonicParsing="false" onAction="#stepButtonClicked" text="Step">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
+          <Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetButtonClicked" text="Reset">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
+            <Slider fx:id="quartzFrequencySlider" blockIncrement="1.0" max="20000.0" min="32.0" value="4000.0" />
+            <Label fx:id="quartzFrequencyLabel" maxWidth="100.0" prefHeight="20.0" text="4000000 Hz ">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label fx:id="runtimeCounterLabel" alignment="CENTER_RIGHT" text="0 µs">
+               <padding>
+                  <Insets right="20.0" />
+               </padding>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+        </buttons>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="10.0" top="10.0" />
+         </padding>
+      </ButtonBar>
+      <SplitPane dividerPositions="0.7211538461538461" orientation="VERTICAL" style="-fx-background-color: #ffffff;" VBox.vgrow="ALWAYS">
+        <items>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox prefHeight="538.0" prefWidth="775.0">
+                     <children>
+                        <HBox prefHeight="575.0" prefWidth="775.0">
+                           <children>
+                              <TableView fx:id="codeTable" prefHeight="534.0" prefWidth="794.0">
+                                <columns>
+                                    <TableColumn fx:id="codeTableBreakpoint" prefWidth="45.0" text="Breakpoint" />
+                                  <TableColumn fx:id="codeTableCurrentLine" prefWidth="45.0" resizable="false" text="Exec" />
+                                  <TableColumn fx:id="codeTableLine" prefWidth="727.0" resizable="false" text="Code" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </HBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox prefHeight="554.0" prefWidth="120.0">
+                     <children>
+                        <HBox prefHeight="19.0" prefWidth="100.0">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label text="W:">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="wLabel" text="0x00">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="21.0" prefWidth="120.0">
+                           <children>
+                              <Label text="PC:">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="pcLabel" text="0x0000">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="20.0" prefHeight="19.0" prefWidth="100.0">
+                           <children>
+                              <Label text="PCL:">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="pclLabel" text="0x00">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="71.0" prefHeight="19.0" prefWidth="100.0">
+                           <children>
+                              <Label text="PCLATH:">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="pclathLabel" text="0x00">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="96.0" prefHeight="19.0" prefWidth="100.0">
+                           <children>
+                              <Label text="C:">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="cLabel" text="0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="121.0" prefHeight="19.0" prefWidth="100.0">
+                           <children>
+                              <Label text="DC:">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="dcLabel" text="0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="141.0" prefHeight="19.0" prefWidth="100.0">
+                           <children>
+                              <Label text="Z:">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="zLabel" text="0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox prefHeight="558.0" prefWidth="363.0">
+                     <children>
+                        <TabPane prefHeight="574.0" prefWidth="362.0" style="-fx-border-width: 0 0 0 1; -fx-border-style: solid; -fx-border-color: #ecf0f1;" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="GPR">
+                                 <content>
+                                    <VBox prefHeight="200.0" prefWidth="362.0">
+                                       <children>
+                                          <TableView fx:id="gprTable" editable="true" prefHeight="521.0" prefWidth="342.0">
+                                            <columns>
+                                              <TableColumn fx:id="gprTableAddress" prefWidth="90.0" resizable="false" text="Address" />
+                                              <TableColumn fx:id="gprTableHexValue" minWidth="0.0" onEditCommit="#onGprHexValueChange" prefWidth="120.0" resizable="false" text="Value (HEX)" />
+                                                <TableColumn fx:id="gprTableBinaryValue" prefWidth="130.0" resizable="false" text="Value (Binary)" />
+                                            </columns>
+                                          </TableView>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding></VBox>
+                                 </content>
+                              </Tab>
+                              <Tab text="SFR">
+                                 <content>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <TableView fx:id="sfrTable" editable="true" prefHeight="521.0" prefWidth="342.0">
+                                             <columns>
+                                                <TableColumn fx:id="sfrTableAddress" prefWidth="110.0" resizable="false" text="Address" />
+                                                <TableColumn fx:id="sfrTableHexValue" minWidth="0.0" onEditCommit="#onSfrHexValueChange" prefWidth="113.0" resizable="false" text="Value (HEX)" />
+                                                <TableColumn fx:id="sfrTableBinaryValue" prefWidth="117.0" resizable="false" text="Value (Binary)" />
+                                             </columns>
+                                          </TableView>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </VBox>
+                                 </content>
+                              </Tab>
+                            <Tab text="Stack">
+                                 <content>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <HBox prefHeight="21.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Stack Pointer: ">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                   <padding>
+                                                      <Insets right="5.0" />
+                                                   </padding>
+                                                </Label>
+                                                <Label fx:id="stackPointerLabel" text="0">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox prefHeight="302.0" prefWidth="360.0">
+                                             <children>
+                                                <TableView fx:id="stackTable" prefHeight="302.0" prefWidth="660.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="stackTablePosition" prefWidth="93.0" text="Position" />
+                                                    <TableColumn fx:id="stackTableHexValue" prefWidth="248.0" text="Value (HEX)" />
+                                                  </columns>
+                                                </TableView>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </VBox>
+                                 </content>
+                              </Tab>
+                              <Tab text="I/O-Pins">
+                                 <content>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <HBox prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port A Pin 0:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortA0" />
+                                                   </toggleGroup>
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortA0" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="20.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port A Pin 1:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortA1" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortA1" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="39.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port A Pin 2:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortA2" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortA2" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="58.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port A Pin 3:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortA3" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortA3" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="77.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port A Pin 4:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortA4" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortA4" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="96.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port B Pin 0:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortB0" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortB0" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="25.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="115.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port B Pin 1:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortB1" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortB1" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="153.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port B Pin 2:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortB2" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortB2" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="96.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port B Pin 3:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortB3" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortB3" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="96.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port B Pin 4:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortB4" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortB4" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="77.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port B Pin 5:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortB5" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortB5" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="270.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port B Pin 6:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortB6" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortB6" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox layoutX="20.0" layoutY="289.0" prefHeight="19.0" prefWidth="342.0">
+                                             <children>
+                                                <Label text="Port B Pin 7:">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <RadioButton mnemonicParsing="false" selected="true" text="Input">
+                                                   <HBox.margin>
+                                                      <Insets right="10.0" />
+                                                   </HBox.margin>
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="PortB7" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton mnemonicParsing="false" text="Output" toggleGroup="$PortB7" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding></VBox>
+                                 </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+            <TabPane maxHeight="300.0" minHeight="200.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Console">
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <TextArea fx:id="debugConsole" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                           </children></VBox>
+                     </content>
+                </Tab>
+                  <Tab text="Simulator State" />
+              </tabs>
+            </TabPane>
+        </items>
+      </SplitPane>
+  </children>
+</VBox>
